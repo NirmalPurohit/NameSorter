@@ -1,7 +1,17 @@
-﻿namespace NameSorter.Tests;
+﻿using NameSorter.Person;
+using NameSorter.ExceptionHandling;
 
+namespace NameSorter.Tests;
+
+/// <summary>
+/// Tests <see cref="NameSorterService"/> with edge cases and error prone input.
+/// </summary>
 public class NameSorterServiceTests
 {
+
+    private static NameSorterService CreateNameSorterService(MemoryNameSource source, MemoryDestination destination) =>
+        new(source, destination, new NameParser(), new NameComparer());
+
     [Fact]
     public void Run_SortsByLastNameThenGivenNames()
     {
@@ -11,7 +21,7 @@ public class NameSorterServiceTests
 
         var destination = new MemoryDestination();
 
-        new NameSorterService(source, destination).Run();
+        CreateNameSorterService(source, destination).Run();
 
         Assert.Equal(
             [
@@ -28,20 +38,30 @@ public class NameSorterServiceTests
     [Fact]
     public void Run_SortsPeopleSharingALastNameByGivenNames()
     {
-        var sink = new MemoryDestination();
+        var destination = new MemoryDestination();
 
-        new NameSorterService(new MemoryNameSource("Zoe Smith", "Adam Smith", "Adam Zed Smith"), sink).Run();
+        CreateNameSorterService(new MemoryNameSource("Zoe Smith", "Adam Smith", "Adam Zed Smith"), destination).Run();
 
-        Assert.Equal(["Adam Smith", "Adam Zed Smith", "Zoe Smith"], sink.Lines);
+        Assert.Equal(["Adam Smith", "Adam Zed Smith", "Zoe Smith"], destination.Lines);
     }
 
     [Fact]
     public void Run_SkipsBlankLines()
     {
-        var sink = new MemoryDestination();
+        var destination = new MemoryDestination();
 
-        new NameSorterService(new MemoryNameSource("Janet Parsons", "", "   ", "Marin Alvarez"), sink).Run();
+        CreateNameSorterService(new MemoryNameSource("Janet Parsons", "", "   ", "Marin Alvarez"), destination).Run();
 
-        Assert.Equal(["Marin Alvarez", "Janet Parsons"], sink.Lines);
+        Assert.Equal(["Marin Alvarez", "Janet Parsons"], destination.Lines);
+    }
+
+    [Fact]
+    public void Run_WithAnInvalidName_ThrowsAndWritesNothing()
+    {
+        var destination = new MemoryDestination();
+        var service = CreateNameSorterService(new MemoryNameSource("Marin Alvarez", "Madonna"), destination);
+
+        Assert.Throws<InvalidNameException>(service.Run);
+        Assert.Empty(destination.Lines);
     }
 }

@@ -1,4 +1,7 @@
+/// Helper classes to create test data.
+
 using NameSorter.IO;
+using NameSorter.Person;
 
 namespace NameSorter.Tests;
 
@@ -11,7 +14,7 @@ internal sealed class MemoryDestination : INameDestination
 {
     public List<string> Lines {get;} = [];
 
-    public void Write(in IList<string> names) =>
-        Lines.AddRange(names.Select(name => name));
+    public void Write(in IList<PersonName> names) =>
+        Lines.AddRange(names.Select(name => name.ToString()));
 
 }
