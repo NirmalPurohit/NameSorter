@@ -6,11 +6,19 @@ namespace NameSorter.IO;
 /// A concrete class to provide a file stream as in input to read the names.
 /// </summary>
 /// <param name="filePath"></param>
-public class FileNameSource(string filePath, ILogger? logger): INameSource
+public class FileNameSource(string filePath, ILogger? logger = null): INameSource
 {
     public IEnumerable<string> ReadLines()
     {
-        logger?.log("Reading from file.");
-        return File.ReadAllLines(filePath);
+        try
+        {
+            logger?.log("Reading from file.");
+            return File.ReadAllLines(filePath);
+        } 
+        catch (FileNotFoundException)
+        {
+            logger?.log("Source file not found");
+            throw;
+        }
     }
 }

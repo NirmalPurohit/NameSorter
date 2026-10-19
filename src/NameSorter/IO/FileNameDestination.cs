@@ -7,7 +7,7 @@ namespace NameSorter.IO;
 /// A concrete class to stream the names to a file.
 /// </summary>
 /// <param name="filePath"></param>
-public class FileNameDestination(string filePath, ILogger? logger) : INameDestination
+public class FileNameDestination(string filePath, ILogger? logger = null) : INameDestination
 {
     public void Write(in IList<PersonName> names)
     {

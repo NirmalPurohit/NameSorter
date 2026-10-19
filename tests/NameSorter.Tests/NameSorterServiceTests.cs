@@ -10,7 +10,7 @@ public class NameSorterServiceTests
 {
 
     private static NameSorterService CreateNameSorterService(MemoryNameSource source, MemoryDestination destination) =>
-        new(source, destination, new NameParser(), new NameComparer(), null);
+        new(source, destination, new NameParser(), new NameComparer());
 
     [Fact]
     public void Run_SortsByLastNameThenGivenNames()

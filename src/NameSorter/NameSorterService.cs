@@ -20,7 +20,7 @@ public class NameSorterService(
     INameDestination nameDestination,
     NameParser nameParser,
     NameComparer nameComparer,
-    ILogger? logger
+    ILogger? logger = null
 )
 {
     public void Run()
