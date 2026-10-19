@@ -1,0 +1,10 @@
+image: Ubuntu  # Uses a fast Linux container to build your cross-platform .NET app
+
+before_build:
+  - dotnet restore
+
+build_script:
+  - dotnet build --configuration Release
+
+test_script:
+  - dotnet test
