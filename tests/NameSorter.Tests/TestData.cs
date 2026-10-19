@@ -7,7 +7,7 @@ internal sealed class MemoryNameSource(params string[] names) : INameSource
     public IEnumerable<string> ReadLines() => names;
 }
 
-internal sealed class ConsoleDestination : INameDestination
+internal sealed class MemoryDestination : INameDestination
 {
     public List<string> Lines {get;} = [];
 

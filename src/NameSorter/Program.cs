@@ -7,6 +7,7 @@ if (args.Length != 1)
     return 1;
 }
 
+const string outputFile = "sorted-names-list.txt";
 
-new NameSorterService(new FileNameSource(args[0]), new ConsoleDestination(Console.Out)).Run();
+new NameSorterService(new FileNameSource(args[0]), new FileNameDestination(outputFile)).Run();
 return 0;

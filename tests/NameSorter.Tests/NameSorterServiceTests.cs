@@ -9,7 +9,7 @@ public class NameSorterServiceTests
             "Marin Alvarez", "London Lindsey", "Beau Tristan Bentley", "Leo Gardner",
             "Hunter Uriah Mathew Clarke", "Mikayla Lopez", "Frankie Conner Ritter");
 
-        var destination = new ConsoleDestination();
+        var destination = new MemoryDestination();
 
         new NameSorterService(source, destination).Run();
 
@@ -23,5 +23,25 @@ public class NameSorterServiceTests
             destination.Lines
         );
 
+    }
+
+    [Fact]
+    public void Run_SortsPeopleSharingALastNameByGivenNames()
+    {
+        var sink = new MemoryDestination();
+
+        new NameSorterService(new MemoryNameSource("Zoe Smith", "Adam Smith", "Adam Zed Smith"), sink).Run();
+
+        Assert.Equal(["Adam Smith", "Adam Zed Smith", "Zoe Smith"], sink.Lines);
+    }
+
+    [Fact]
+    public void Run_SkipsBlankLines()
+    {
+        var sink = new MemoryDestination();
+
+        new NameSorterService(new MemoryNameSource("Janet Parsons", "", "   ", "Marin Alvarez"), sink).Run();
+
+        Assert.Equal(["Marin Alvarez", "Janet Parsons"], sink.Lines);
     }
 }
