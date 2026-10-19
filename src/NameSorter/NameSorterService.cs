@@ -1,4 +1,5 @@
 using NameSorter.IO;
+using NameSorter.Observability;
 using NameSorter.Person;
 
 namespace NameSorter;
@@ -13,21 +14,26 @@ namespace NameSorter;
 /// <param name="nameDestination">The output path where the results should be written.</param>
 /// <param name="nameParser">The parser to split and convert each name for sorting.</param>
 /// <param name="nameComparer">The custom comparer for OrderBy to use.</param>
+/// <param name="logger"></param>
 public class NameSorterService(
     INameSource nameSource,
     INameDestination nameDestination,
     NameParser nameParser,
-    NameComparer nameComparer
+    NameComparer nameComparer,
+    ILogger? logger
 )
 {
     public void Run()
     {
+        logger?.log("Running the application....");
+        logger?.log("Source" + nameSource.GetType().ToString());
         var sortedNames = nameSource.ReadLines()
             .Where(name => !string.IsNullOrWhiteSpace(name))
             .Select(nameParser.Parse)
             .OrderBy(name => name, nameComparer)
             .ToList();
         
+        logger?.log("Destination " + nameDestination.GetType().ToString());
         nameDestination.Write(sortedNames);
     }
 }

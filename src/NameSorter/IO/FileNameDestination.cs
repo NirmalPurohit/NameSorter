@@ -1,3 +1,4 @@
+using NameSorter.Observability;
 using NameSorter.Person;
 
 namespace NameSorter.IO;
@@ -6,8 +7,12 @@ namespace NameSorter.IO;
 /// A concrete class to stream the names to a file.
 /// </summary>
 /// <param name="filePath"></param>
-public class FileNameDestination(string filePath) : INameDestination
+public class FileNameDestination(string filePath, ILogger? logger) : INameDestination
 {
-    public void Write(in IList<PersonName> names) =>
+    public void Write(in IList<PersonName> names)
+    {
+        logger?.log("Writing to file.");
         File.WriteAllLines(filePath, names.Select(name => name.ToString()));
+        logger?.log("Completed writing to file.");
+    }
 }

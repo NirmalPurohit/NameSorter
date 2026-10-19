@@ -2,6 +2,7 @@
 
 using NameSorter;
 using NameSorter.IO;
+using NameSorter.Observability;
 using NameSorter.Person;
 
 if (args.Length != 1)
@@ -11,11 +12,13 @@ if (args.Length != 1)
 }
 
 const string outputFile = "sorted-names-list.txt";
+ILogger logger = new FileLogger();
 
 new NameSorterService(
-        new FileNameSource(args[0]), 
-        new FileNameDestination(outputFile),
+        new FileNameSource(args[0], logger), 
+        new FileNameDestination(outputFile, logger),
         new NameParser(),
-        new NameComparer()
+        new NameComparer(),
+        logger
     ).Run();
 return 0;

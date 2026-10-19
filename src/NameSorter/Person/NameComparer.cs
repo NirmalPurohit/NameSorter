@@ -1,3 +1,5 @@
+using NameSorter.Observability;
+
 namespace NameSorter.Person;
 
 /// <summary>
