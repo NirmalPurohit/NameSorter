@@ -1,10 +1,15 @@
+using NameSorter.IO;
+
 namespace NameSorter;
 
-public class NameSorterService
+public class NameSorterService(
+    INameSource nameSource,
+    INameDestination nameDestination
+)
 {
-    public void Run(string filePath)
+    public void Run()
     {
-        var sortedNames = File.ReadLines(filePath)
+        var sortedNames = nameSource.ReadLines()
             .Where(name => !string.IsNullOrWhiteSpace(name))
             
             // Spliting the name into a list
@@ -17,9 +22,7 @@ public class NameSorterService
             .ThenBy(names => string.Join(' ', names[..^1]), StringComparer.OrdinalIgnoreCase)
             .Select(names => string.Join(' ', names));
         
-        foreach(var name in sortedNames)
-        {
-            Console.WriteLine(name);
-        }
+
+            nameDestination.Write(sortedNames.ToList());
     }
 }

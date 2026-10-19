@@ -1,4 +1,5 @@
 ﻿using NameSorter;
+using NameSorter.IO;
 
 if (args.Length != 1)
 {
@@ -6,5 +7,6 @@ if (args.Length != 1)
     return 1;
 }
 
-new NameSorterService().Run(args[0]);
+
+new NameSorterService(new FileNameSource(args[0]), new ConsoleDestination(Console.Out)).Run();
 return 0;
