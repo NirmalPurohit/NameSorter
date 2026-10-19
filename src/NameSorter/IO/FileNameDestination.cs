@@ -11,8 +11,15 @@ public class FileNameDestination(string filePath, ILogger? logger = null) : INam
 {
     public void Write(in IList<PersonName> names)
     {
-        logger?.log("Writing to file.");
-        File.WriteAllLines(filePath, names.Select(name => name.ToString()));
-        logger?.log("Completed writing to file.");
+        try
+        {
+            logger?.log("Writing to file.");
+            File.WriteAllLines(filePath, names.Select(name => name.ToString()));
+            logger?.log("Completed writing to file.");
+        }
+        catch (Exception ex)
+        {
+            logger?.log("Error while writing to the file!" + ex.Message);
+        }
     }
 }

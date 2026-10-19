@@ -4,6 +4,6 @@ public class ConsoleLogger : ILogger
 {
     public void log(string message)
     {
-        Console.WriteLine(message);
+        Console.WriteLine(DateTime.UtcNow + message);
     }
 }

@@ -6,6 +6,6 @@ public class FileLogger : ILogger
 
     public void log(string message)
     {
-        File.AppendAllText(logFile, Environment.NewLine + message);
+        File.AppendAllText(logFile, Environment.NewLine + DateTime.UtcNow + message);
     }
 }
